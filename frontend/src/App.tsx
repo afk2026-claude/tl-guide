@@ -1,7 +1,6 @@
 import { useEffect } from 'react';
 import { Routes, Route, useLocation } from 'react-router-dom';
 import { AuthProvider } from './context/AuthContext';
-import { API_BASE } from './config';
 import Navbar from './components/Navbar';
 import Footer from './components/Footer';
 import HomePage from './pages/HomePage';
@@ -11,12 +10,12 @@ import CalculatorPage from './pages/CalculatorPage';
 import AdminLoginPage from './pages/admin/LoginPage';
 import AdminDashboardPage from './pages/admin/DashboardPage';
 import AdminLink from './components/AdminLink';
+import { trackVisit } from './engine/visitTracker';
 
 function VisitTracker() {
   const location = useLocation();
   useEffect(() => {
-    // 向后端发送访问记录（通过 API 中间件自动记录）
-    fetch(`${API_BASE}/api/health?page=${encodeURIComponent(location.pathname)}`).catch(() => {});
+    trackVisit(location.pathname);
   }, [location.pathname]);
   return null;
 }

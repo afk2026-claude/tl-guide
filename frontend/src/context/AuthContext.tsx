@@ -1,56 +1,35 @@
-import { createContext, useContext, useState, useEffect, type ReactNode } from 'react';
-import { API_BASE } from '../config';
+import { createContext, useContext, useState, type ReactNode } from 'react';
+
+const ADMIN_USER = 'admin';
+const ADMIN_PASS = '1234';
 
 interface AuthState {
-  token: string | null;
-  user: string | null;
-  login: (username: string, password: string) => Promise<boolean>;
-  logout: () => void;
   isAdmin: boolean;
+  login: (username: string, password: string) => boolean;
+  logout: () => void;
 }
 
 const AuthContext = createContext<AuthState>(null!);
 
 export function AuthProvider({ children }: { children: ReactNode }) {
-  const [token, setToken] = useState<string | null>(() => localStorage.getItem('admin_token'));
-  const [user, setUser] = useState<string | null>(() => localStorage.getItem('admin_user'));
+  const [isAdmin, setIsAdmin] = useState(() => !!sessionStorage.getItem('admin_logged_in'));
 
-  useEffect(() => {
-    if (token) localStorage.setItem('admin_token', token);
-    else localStorage.removeItem('admin_token');
-  }, [token]);
-
-  useEffect(() => {
-    if (user) localStorage.setItem('admin_user', user);
-    else localStorage.removeItem('admin_user');
-  }, [user]);
-
-  const login = async (username: string, password: string) => {
-    try {
-      const res = await fetch(`${API_BASE}/api/admin/login`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ username, password })
-      });
-      const data = await res.json();
-      if (data.success) {
-        setToken(data.token);
-        setUser(data.user.name);
-        return true;
-      }
-      return false;
-    } catch {
-      return false;
+  const login = (username: string, password: string) => {
+    if (username === ADMIN_USER && password === ADMIN_PASS) {
+      sessionStorage.setItem('admin_logged_in', '1');
+      setIsAdmin(true);
+      return true;
     }
+    return false;
   };
 
   const logout = () => {
-    setToken(null);
-    setUser(null);
+    sessionStorage.removeItem('admin_logged_in');
+    setIsAdmin(false);
   };
 
   return (
-    <AuthContext.Provider value={{ token, user, login, logout, isAdmin: !!token }}>
+    <AuthContext.Provider value={{ isAdmin, login, logout }}>
       {children}
     </AuthContext.Provider>
   );

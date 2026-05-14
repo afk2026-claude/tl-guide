@@ -6,18 +6,17 @@ export default function AdminLoginPage() {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
-  const [loading, setLoading] = useState(false);
   const { login } = useAuth();
   const navigate = useNavigate();
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     setError('');
-    setLoading(true);
-    const ok = await login(username, password);
-    setLoading(false);
-    if (ok) navigate('/admin');
-    else setError('用户名或密码错误');
+    if (login(username, password)) {
+      navigate('/admin');
+    } else {
+      setError('用户名或密码错误');
+    }
   };
 
   return (
@@ -39,9 +38,9 @@ export default function AdminLoginPage() {
               className="w-full px-4 py-3 rounded-xl border-2 border-gray-100 focus:border-magic-300 outline-none text-sm bg-white/80" required />
           </div>
           {error && <p className="text-red-400 text-sm text-center">{error}</p>}
-          <button type="submit" disabled={loading}
-            className="w-full py-3 rounded-xl font-bold text-white bg-gradient-to-r from-magic-500 to-magic-600 hover:scale-[1.02] transition-all disabled:opacity-50">
-            {loading ? '登录中...' : '登录'}
+          <button type="submit"
+            className="w-full py-3 rounded-xl font-bold text-white bg-gradient-to-r from-magic-500 to-magic-600 hover:scale-[1.02] transition-all">
+            登录
           </button>
         </form>
       </div>
