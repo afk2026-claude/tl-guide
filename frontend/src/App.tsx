@@ -16,7 +16,7 @@ function VisitTracker() {
   const location = useLocation();
   useEffect(() => {
     // 向后端发送访问记录（通过 API 中间件自动记录）
-    fetch(`${API_BASE}/api/health`).catch(() => {});
+    fetch(`${API_BASE}/api/health?page=${encodeURIComponent(location.pathname)}`).catch(() => {});
   }, [location.pathname]);
   return null;
 }
