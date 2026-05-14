@@ -1,0 +1,17 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+body {
+  margin: 0;
+  font-family: 'PingFang SC', 'Microsoft YaHei', sans-serif;
+  -webkit-font-smoothing: antialiased;
+  background: linear-gradient(135deg, #fff5f5 0%, #f0f4ff 50%, #fef9e7 100%);
+  min-height: 100vh;
+  color: #444;
+}
+
+::-webkit-scrollbar { width: 8px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: #dccbfe; border-radius: 4px; }
+::-webkit-scrollbar-thumb:hover { background: #c2a8fd; }

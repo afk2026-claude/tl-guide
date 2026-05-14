@@ -1,0 +1,11 @@
+services:
+  - type: web
+    name: tl-guide-api
+    env: node
+    buildCommand: npm install
+    startCommand: node src/index.js
+    envVars:
+      - key: PORT
+        value: 3001
+      - key: CORS_ORIGIN
+        value: '*'  # 部署后建议改为 Vercel 域名
