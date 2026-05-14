@@ -10,5 +10,20 @@
 </head>
 <body>
     <div id="root"></div>
+    <!-- 错误捕获：白屏时显示错误信息 -->
+    <script>
+      window.addEventListener('error', function(e) {
+        var root = document.getElementById('root');
+        root.innerHTML = '<div style="padding:40px;text-align:center;font-family:sans-serif;color:#c00">' +
+          '<h2 style="font-size:20px;margin-bottom:16px">页面加载出错</h2>' +
+          '<p style="font-size:14px;margin:4px 0">' + (e.message || e.error || '未知错误') + '</p>' +
+          '<p style="font-size:12px;color:#999;margin-top:12px">' + (e.filename || '') + '</p>' +
+          '</div>';
+        console.error('Runtime error:', e.error || e.message);
+      });
+      window.addEventListener('unhandledrejection', function(e) {
+        console.error('Unhandled promise rejection:', e.reason);
+      });
+    </script>
 </body>
 </html>
